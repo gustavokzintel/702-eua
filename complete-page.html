@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>702 Estados Unidos - Sequoia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --carbon: #1d1d1b;
+            --carbon-deep: #131311;
+            --mist: #c6c6c4;
+            --porcelain: #e3e1df;
+            --carbon-translucent: rgba(29, 29, 27, 0.88);
+            --ease-editorial: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --ease-silent: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+            background-color: var(--carbon);
+            color: var(--mist);
+            font-weight: 300;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .diagonal-clip-left {
+            clip-path: polygon(49.69% 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .contact-diagonal-clip {
+            clip-path: polygon(75% 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        [x-cloak] { display: none !important; }
+
+        .writing-vertical-lr {
+            writing-mode: vertical-lr;
+        }
+
+        scroll-behavior: smooth;
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        carbon: '#1d1d1b',
+                        'carbon-deep': '#131311',
+                        mist: '#c6c6c4',
+                        porcelain: '#e3e1df',
+                    },
+                    fontFamily: {
+                        sans: ['"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body x-data="app()" x-init="initApp()">
+
+    <!-- Navbar -->
+    <header 
+        x-show="navVisible"
+        x-transition:enter="transition ease-out duration-400"
+        x-transition:enter-start="-translate-y-full"
+        x-transition:enter-end="translate-y-0"
+        x-transition:leave="transition ease-in duration-400"
+        x-transition:leave-start="translate-y-0"
+        x-transition:leave-end="-translate-y-full"
+        class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-carbon/80 border-b border-white/10"
+        x-cloak
+    >
+        <div class="max-w-7xl mx-auto h-16 flex items-center justify-between px-6 lg:px-12">
+            <div class="flex items-center gap-4">
+                <span class="text-[13px] tracking-[0.24em] uppercase font-normal text-porcelain">702 Estados Unidos</span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-8">
+                <template x-for="link in navLinks" :key="link.id">
+                    <a
+                        :href="'#' + link.id"
+                        class="relative text-[11px] tracking-[0.24em] uppercase py-1 transition-all duration-300"
+                        :class="activeSection === link.id ? 'text-porcelain tracking-[0.28em]' : 'text-mist hover:text-porcelain hover:tracking-[0.28em]'"
+                        x-text="link.label"
+                    ></a>
+                </template>
+            </nav>
+
+            <button 
+                class="md:hidden flex flex-col gap-1.5 p-2" 
+                @click="isMobileMenuOpen = !isMobileMenuOpen"
+            >
+                <span class="block w-6 h-px bg-porcelain transition-transform" :class="isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''"></span>
+                <span class="block w-6 h-px bg-porcelain" :class="isMobileMenuOpen ? 'opacity-0' : ''"></span>
+                <span class="block w-6 h-px bg-porcelain transition-transform" :class="isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''"></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div 
+            x-show="isMobileMenuOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 -translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-cloak
+            class="md:hidden absolute top-16 left-0 right-0 bg-carbon p-8 border-b border-white/10"
+        >
+            <div class="flex flex-col gap-6">
+                <template x-for="link in navLinks" :key="link.id">
+                    <a
+                        :href="'#' + link.id"
+                        @click="isMobileMenuOpen = false"
+                        class="text-xs tracking-[0.24em] uppercase text-mist hover:text-porcelain"
+                        x-text="link.label"
+                    ></a>
+                </template>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-screen overflow-hidden bg-carbon">
+            <div 
+                id="hero-bg"
+                class="absolute inset-0 bg-cover bg-center" 
+                style="background-image: linear-gradient(180deg, rgba(29, 29, 27, 0.28), rgba(29, 29, 27, 0.52)), url('https://raw.githubusercontent.com/gustavokzintel/702-eua/main/ChatGPT-Image-7-de-abr.png')"
+            ></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-carbon/80"></div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto min-h-screen flex flex-col justify-between pt-28 pb-12 px-6 lg:px-12">
+                <p class="text-[11px] tracking-[0.32em] uppercase text-porcelain opacity-80">ADDRESS | VIEW | ARCHITECTURE</p>
+                
+                <div class="self-center w-full max-w-[760px] filter drop-shadow-2xl">
+                    <img src="https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Logo_negativo_centra.svg" alt="702" class="w-full h-auto">
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-end gap-12">
+                    <div class="max-w-md space-y-4">
+                        <p class="italic text-porcelain text-sm opacity-90">Quando nada é supérfluo, tudo é definitivo.</p>
+                        <p class="text-porcelain font-medium text-base tracking-wide">50m² a 165m² · 1 e 2 dorms · 1 vaga</p>
+                        <p class="text-mist leading-relaxed text-sm">O lifestyle dos Jardins e a essência do Jardim Europa juntos em um endereço.</p>
+                        <p class="text-[10px] tracking-[0.24em] uppercase text-mist pt-2">Rua Estados Unidos, 702 - Jardins, São Paulo / SP</p>
+                    </div>
+                    <a 
+                        href="#contato" 
+                        class="inline-flex items-center justify-center min-h-[48px] px-8 rounded-full border border-porcelain bg-porcelain text-carbon text-[12px] tracking-[0.24em] uppercase font-semibold transition-all duration-300 hover:bg-transparent hover:text-porcelain"
+                    >
+                        Tenho Interesse
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Campaign -->
+        <section class="bg-carbon py-32 px-6">
+            <div class="max-w-7xl mx-auto flex flex-col items-center">
+                <div class="text-center mb-16 space-y-6 w-full reveal">
+                   <p class="text-[10px] tracking-[0.48em] uppercase text-white/30">Filme da Campanha</p>
+                   <h2 class="text-2xl md:text-3xl font-light uppercase tracking-widest text-white">702 Estados Unidos</h2>
+                </div>
+                
+                <div class="relative aspect-video w-full max-w-5xl mx-auto overflow-hidden shadow-2xl reveal">
+                   <div 
+                     class="absolute inset-0 bg-cover bg-center" 
+                     style="background-image: url('https://raw.githubusercontent.com/gustavokzintel/702-eua/main/ChatGPT-Image-7-de-abra.png')"
+                   ></div>
+                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center group cursor-pointer hover:bg-black/20 transition-all duration-700">
+                      <div class="w-24 h-24 rounded-full border border-white/40 flex items-center justify-center transition-transform group-hover:scale-110">
+                        <i data-lucide="play" class="fill-white text-white ml-2 h-8 w-8"></i>
+                      </div>
+                   </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto -->
+        <section id="manifesto" class="relative flex items-center min-h-screen bg-carbon py-40 overflow-hidden">
+            <div class="absolute right-12 top-1/2 -translate-y-1/2 rotate-90 origin-center text-mist opacity-30 whitespace-nowrap hidden lg:block">
+                <span class="text-[11px] tracking-[0.32em] uppercase">Address | View | Architecture</span>
+            </div>
+            <div class="absolute bottom-12 left-12 text-mist opacity-30">
+                <span class="text-[11px] tracking-[0.32em] uppercase">01 / Manifesto</span>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-6 lg:px-12 w-full space-y-12">
+                <div class="manifesto-item reveal">
+                    <p class="text-porcelain text-xl md:text-2xl lg:text-3xl tracking-[0.18em] uppercase font-light leading-snug">
+                        <span class="font-medium">Presença absoluta:</span> Rua Estados Unidos, um endereço que se impõe.
+                    </p>
+                </div>
+                <div class="manifesto-item reveal">
+                    <p class="text-porcelain text-xl md:text-2xl lg:text-3xl tracking-[0.18em] uppercase font-light leading-snug">
+                        <span class="font-medium">Horizonte particular:</span> vista irrestrita para o verde do Jardim Europa.
+                    </p>
+                </div>
+                <div class="manifesto-item reveal">
+                    <p class="text-porcelain text-xl md:text-2xl lg:text-3xl tracking-[0.18em] uppercase font-light leading-snug">
+                        <span class="font-medium">Precisão sem excessos:</span> projeto irreplicável by Triptyque.
+                    </p>
+                </div>
+                <p class="pt-12 text-lg md:text-xl text-mist italic tracking-wide reveal">
+                    Um equilíbrio raro entre lugar, perspectiva e forma.
+                </p>
+                <p class="text-porcelain uppercase tracking-[0.24em] font-medium reveal">
+                    Quando nada é acessório, tudo é definitivo.
+                </p>
+            </div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="galeria" class="relative bg-porcelain text-carbon py-24 px-6 overflow-hidden">
+            <div class="absolute right-0 top-0 w-[30vw] opacity-[0.03] select-none pointer-events-none -translate-y-1/4 grayscale invert">
+                <img src="https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Logo_negativo_centra.svg" alt="702" class="w-full h-auto">
+            </div>
+            
+            <div class="max-w-7xl mx-auto relative z-10">
+                <header class="grid lg:grid-cols-2 gap-12 items-end mb-20">
+                    <div class="space-y-6 reveal">
+                        <p class="text-[10px] tracking-[0.48em] uppercase text-black/50">Curadoria Visual</p>
+                        <h2 class="text-3xl md:text-5xl font-light uppercase tracking-widest">Galeria</h2>
+                        <p class="text-black/70 leading-loose max-w-md">Lugar, perspectiva e forma em uma sequência visual pensada para apresentar o 702 Estados Unidos com presença, silêncio e precisão.</p>
+                    </div>
+                    <div class="h-px bg-black/20 w-full mb-4"></div>
+                </header>
+
+                <div class="grid grid-cols-6 gap-4">
+                    <template x-for="(item, i) in galleryData" :key="i">
+                        <div 
+                            @click="selectedGalleryIdx = i"
+                            class="relative overflow-hidden cursor-pointer group bg-carbon min-h-[440px] col-span-6 md:col-span-2 reveal"
+                        >
+                            <div 
+                                class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
+                                :style="'background-image: url(' + item.image + ')'"
+                            ></div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80 opacity-90"></div>
+                            
+                            <div class="absolute top-6 right-6 text-[10px] tracking-widest text-white/60 font-medium" x-text="'0' + (i + 1)"></div>
+                            <div class="absolute inset-x-0 bottom-0 p-8 text-white">
+                                <div class="flex items-center gap-4 mb-4 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <span class="text-[9px] tracking-[0.38em] uppercase" x-text="item.eyebrow"></span>
+                                    <div class="h-px bg-white/40 flex-1 max-w-[80px]"></div>
+                                </div>
+                                <h3 class="text-xl md:text-2xl font-light uppercase tracking-widest leading-tight" x-text="item.title"></h3>
+                                <p class="text-xs text-white/50 mt-4 max-w-xs opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500" x-text="item.copy"></p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Gallery Modal -->
+            <div 
+                x-show="selectedGalleryIdx !== null"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl"
+                @click="selectedGalleryIdx = null"
+                x-cloak
+            >
+                <div 
+                    class="relative max-w-6xl w-full bg-carbon overflow-hidden shadow-2xl"
+                    @click.stop
+                >
+                    <button 
+                        @click="selectedGalleryIdx = null"
+                        class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full border border-white/20 bg-black/40 text-white hover:bg-white hover:text-black transition-colors"
+                    >
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+
+                    <div 
+                        class="aspect-video bg-cover bg-center" 
+                        :style="'background-image: url(' + galleryData[selectedGalleryIdx || 0].image + ')'"
+                    ></div>
+                    
+                    <div class="p-8 md:p-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-end gap-8 text-white">
+                        <div>
+                            <p class="text-[10px] tracking-[0.38em] uppercase text-white/50 mb-4" x-text="galleryData[selectedGalleryIdx || 0].eyebrow"></p>
+                            <h3 class="text-3xl md:text-5xl font-light uppercase tracking-widest" x-text="galleryData[selectedGalleryIdx || 0].title"></h3>
+                            <p class="text-white/60 mt-6 max-w-xl leading-relaxed" x-text="galleryData[selectedGalleryIdx || 0].copy"></p>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button 
+                                @click="selectedGalleryIdx = (selectedGalleryIdx - 1 + galleryData.length) % galleryData.length"
+                                class="w-12 h-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white hover:text-black transition-all"
+                            >
+                                <i data-lucide="chevron-left" class="h-5 w-5"></i>
+                            </button>
+                            <button 
+                                @click="selectedGalleryIdx = (selectedGalleryIdx + 1) % galleryData.length"
+                                class="w-12 h-12 flex items-center justify-center rounded-full border border-white/20 hover:bg-white hover:text-black transition-all"
+                            >
+                                <i data-lucide="chevron-right" class="h-5 w-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Differentials List -->
+        <section id="diferenciais-list" class="bg-mist text-carbon py-40 px-6">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-32">
+                <div class="lg:sticky lg:top-32 h-fit space-y-8 reveal">
+                    <p class="text-[10px] tracking-[0.48em] uppercase text-black/40">Diferenciais</p>
+                    <h2 class="text-3xl md:text-5xl font-light uppercase tracking-widest leading-none">Presença <br>Absoluta.</h2>
+                    <p class="text-black/60 italic text-xl font-light">Presença absoluta é um endereço que se impõe.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <template x-for="(feat, i) in features" :key="i">
+                        <div 
+                            class="grid grid-cols-[60px_1fr] gap-8 py-8 border-b border-black/10 group hover:border-black transition-colors reveal"
+                        >
+                            <span class="text-[10px] font-bold text-black/30 pt-1 group-hover:text-black" x-text="'0' + (i + 1)"></span>
+                            <p class="text-lg font-light leading-relaxed" x-text="feat"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leisure Section (Slider) -->
+        <section id="diferenciais" class="bg-carbon overflow-hidden">
+            <div class="py-32 px-6 text-center space-y-6 reveal">
+                <p class="text-[10px] tracking-[0.48em] uppercase text-mist">Lazer e Áreas Comuns</p>
+                <h2 class="text-3xl md:text-5xl font-light uppercase tracking-widest text-porcelain">At Home.</h2>
+            </div>
+
+            <div class="relative h-[70vh] min-h-[500px]">
+                <div class="absolute inset-0 flex transition-transform duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]" :style="'transform: translateX(-' + (activeLeisureIdx * 100) + '%)'">
+                    <template x-for="(slide, i) in leisureSlides" :key="i">
+                        <div class="min-w-full h-full relative overflow-hidden">
+                            <div 
+                                class="absolute w-[80%] h-full bg-cover bg-center" 
+                                :style="'background-image: url(' + slide.image + ')'"
+                            ></div>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="absolute inset-0 pointer-events-none">
+                    <div class="absolute right-0 top-0 w-1/2 h-full bg-carbon diagonal-clip-left"></div>
+                    <div class="absolute inset-y-0 right-0 w-[45%] flex flex-col justify-center px-12 md:px-24 text-right items-end pointer-events-auto">
+                        <div class="space-y-8 max-w-sm" :key="activeLeisureIdx">
+                            <p class="text-[10px] tracking-[0.42em] uppercase text-mist" x-text="leisureSlides[activeLeisureIdx].tag"></p>
+                            <div class="space-y-4">
+                                <h3 class="text-3xl md:text-4xl font-light uppercase tracking-widest text-porcelain" x-text="leisureSlides[activeLeisureIdx].title"></h3>
+                                <div class="w-14 h-px bg-white/30 ml-auto pt-8"></div>
+                            </div>
+                            <p class="text-mist leading-relaxed text-sm font-light" x-text="leisureSlides[activeLeisureIdx].desc"></p>
+                        </div>
+
+                        <div class="mt-12 flex items-center gap-8">
+                            <div class="text-[11px] tracking-[0.24em] text-white/50" x-text="'0' + (activeLeisureIdx + 1) + ' / 04'"></div>
+                            <div class="flex gap-4">
+                                <button 
+                                    @click="activeLeisureIdx = (activeLeisureIdx - 1 + 4) % 4"
+                                    class="w-12 h-12 flex items-center justify-center rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+                                >
+                                    <i data-lucide="chevron-left" class="h-4 w-4"></i>
+                                </button>
+                                <button 
+                                    @click="activeLeisureIdx = (activeLeisureIdx + 1) % 4"
+                                    class="w-12 h-12 flex items-center justify-center rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+                                >
+                                    <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-24 text-center reveal">
+                <a href="#contato" class="inline-flex items-center justify-center min-h-[48px] px-10 rounded-full border border-porcelain text-porcelain uppercase text-[11px] font-medium tracking-[0.22em] transition-all hover:bg-porcelain hover:text-carbon">
+                    Quero Conhecer o 702 Estados Unidos
+                </a>
+            </div>
+        </section>
+
+        <!-- Plants -->
+        <section id="plantas" class="bg-mist text-carbon py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <header class="grid lg:grid-cols-2 gap-12 items-end mb-20">
+                    <div class="space-y-6 reveal">
+                        <p class="text-[10px] tracking-[0.5em] uppercase text-black/50">Espaços e Dimensões</p>
+                        <h2 class="text-5xl md:text-6xl font-light uppercase tracking-widest">Plantas</h2>
+                        <p class="italic text-black/70 font-light text-lg">Escolha a melhor planta para se encaixar no seu dia a dia.</p>
+                    </div>
+                    <div class="h-px bg-black/20 w-full mb-4"></div>
+                </header>
+
+                <div class="flex flex-wrap gap-4 mb-20">
+                    <template x-for="(item, i) in plantsData" :key="i">
+                        <button
+                            @click="activePlantIdx = i"
+                            class="px-8 py-3.5 rounded-full text-[10px] font-bold uppercase tracking-[0.22em] border transition-all duration-500 reveal"
+                            :class="activePlantIdx === i ? 'bg-carbon text-porcelain border-carbon translate-y-[-2px]' : 'bg-transparent text-carbon border-carbon/30 hover:border-carbon'"
+                            x-text="item.category"
+                        ></button>
+                    </template>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-20 items-stretch bg-porcelain p-6 md:p-12 border border-black/10 reveal">
+                    <div class="relative aspect-square md:aspect-auto bg-[#f5f4f2] overflow-hidden border border-black/10 flex items-center justify-center p-12">
+                        <div class="absolute inset-0 opacity-10" style="background: radial-gradient(circle at 22% 18%,#fff,transparent 28%),linear-gradient(135deg,#e3e1df,#c6c6c4)"></div>
+                        <div class="absolute bottom-[-5%] right-[-5%] w-[30vw] opacity-[0.03] select-none pointer-events-none grayscale invert border border-white">
+                            <img src="https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Logo_negativo_centra.svg" alt="702" class="w-full h-auto">
+                        </div>
+                        
+                        <div class="relative z-10 w-full h-full flex items-center justify-center">
+                            <div 
+                                class="w-full h-full bg-contain bg-center bg-no-repeat filter drop-shadow-2xl transition-all duration-500" 
+                                :style="'background-image: url(' + plantsData[activePlantIdx].image + ')'"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center space-y-12">
+                        <div class="space-y-6">
+                            <p class="text-[10px] tracking-[0.42em] uppercase text-black/40" x-text="'0' + (activePlantIdx + 1) + ' / 03'"></p>
+                            <h3 class="text-4xl md:text-5xl font-light uppercase tracking-widest" x-text="plantsData[activePlantIdx].title"></h3>
+                            <p class="text-black/60 leading-relaxed max-w-md" x-text="plantsData[activePlantIdx].description"></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                            <div class="space-y-3 pt-6 border-t border-black/10">
+                                <p class="text-[10px] uppercase tracking-widest text-black/50">Metragem</p>
+                                <p class="text-sm font-medium" x-text="plantsData[activePlantIdx].area"></p>
+                            </div>
+                            <div class="space-y-3 pt-6 border-t border-black/10">
+                                <p class="text-[10px] uppercase tracking-widest text-black/50">Diferencial</p>
+                                <p class="text-sm font-medium" x-text="plantsData[activePlantIdx].layout"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4 pt-12">
+                            <button class="flex items-center gap-3 px-8 py-4 rounded-full border border-black/60 text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-carbon hover:text-white">
+                                Ver Planta Completa
+                                <i data-lucide="chevron-right" class="h-3 w-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Construction Stage -->
+        <section class="bg-carbon text-porcelain py-40 px-6">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.4fr] gap-32 items-start">
+                <div class="lg:sticky lg:top-32 space-y-8 reveal">
+                    <p class="text-[10px] tracking-[0.48em] uppercase text-white/30">Estágio da Obra</p>
+                    <div class="space-y-2">
+                        <p class="text-7xl md:text-9xl font-light tracking-tighter leading-none">59,42<span class="text-3xl opacity-50 ml-1">%</span></p>
+                        <p class="text-[10px] uppercase tracking-[0.32em] text-white/50 pl-2 text-center md:text-left">Concluído</p>
+                    </div>
+                </div>
+
+                <div class="w-full space-y-10">
+                    <template x-for="(item, i) in constructionStatus" :key="i">
+                        <div class="space-y-4 reveal">
+                            <div class="flex justify-between items-end text-[10px] uppercase tracking-widest text-white/40">
+                                <span x-text="item.name"></span>
+                                <span x-text="item.p + '%'"></span>
+                            </div>
+                            <div class="h-1 bg-white/10 relative overflow-hidden">
+                                <div 
+                                    class="absolute inset-y-0 left-0 bg-porcelain transition-all duration-1000 ease-out"
+                                    :style="'width: ' + item.p + '%'"
+                                ></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location -->
+        <section id="localizacao" class="bg-carbon py-40 px-6 border-t border-white/5">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
+                <div class="space-y-8 reveal">
+                    <p class="text-xs text-white/40 uppercase tracking-[0.32em]">View | Architecture | <span class="text-white font-semibold">Address by Rua Estados Unidos</span></p>
+                    <h2 class="text-3xl md:text-4xl font-light uppercase tracking-widest leading-normal">Rua Estados Unidos, 702<br>Jardins, São Paulo / SP</h2>
+                    <div class="space-y-6 text-white/60 leading-loose text-lg font-light max-w-lg">
+                        <p>O único residencial da Rua Estados Unidos, localizado no melhor bairro de São Paulo, próximo aos melhores restaurantes, bares e lojas da cidade.</p>
+                        <p>A 5 minutos do Parque do Ibirapuera, possui uma vista deslumbrante para o Jardim Europa.</p>
+                    </div>
+                </div>
+
+                <div class="aspect-square bg-carbon-deep border border-white/10 relative overflow-hidden flex items-center justify-center reveal">
+                    <div 
+                        class="absolute inset-0 opacity-20 bg-cover bg-center grayscale" 
+                        style="background-image: url('https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20182046.png')"
+                    ></div>
+                    <div class="relative z-10 w-full h-full p-24">
+                        <svg viewBox="0 0 600 600" class="w-full h-full">
+                            <g stroke="white" strokeWidth="0.5" opacity="0.2" fill="none">
+                                <line x1="0" y1="120" x2="600" y2="100"/><line x1="0" y1="380" x2="600" y2="360"/>
+                                <line x1="120" y1="0" x2="100" y2="600"/><line x1="380" y1="0" x2="360" y2="600"/>
+                            </g>
+                            <line x1="40" y1="290" x2="560" y2="320" stroke="white" strokeWidth="2" opacity="0.8"/>
+                            <circle cx="300" cy="305" r="30" fill="none" stroke="white" strokeWidth="1" opacity="0.3" />
+                            <circle cx="300" cy="305" r="5" fill="white" />
+                            <text x="315" y="300" fill="white" style="font-size: 20px; font-weight: bold; letter-spacing: 0.1em;">702</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contato" class="min-h-screen bg-carbon-deep text-porcelain overflow-hidden">
+            <div class="grid lg:grid-cols-2 min-h-screen">
+                <div class="relative min-h-[400px] lg:min-h-screen reveal">
+                    <div 
+                        class="absolute inset-0 bg-cover bg-left" 
+                        style="background-image: url('https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20183013.png')"
+                    ></div>
+                    <div class="absolute inset-0 bg-carbon-deep contact-diagonal-clip"></div>
+                    <div class="absolute top-12 left-12 writing-vertical-lr text-[11px] tracking-[0.32em] uppercase text-white/50 opacity-60">
+                        Address | View | Architecture
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center p-8 md:p-24 lg:p-32 space-y-12 max-w-2xl mx-auto lg:mx-0 reveal">
+                    <div class="space-y-6">
+                        <p class="text-[10px] tracking-[0.48em] uppercase text-mist">Contato</p>
+                        <h2 class="text-4xl md:text-5xl font-light uppercase tracking-widest leading-snug">Preencha o formulário e prepare-se para viver uma nova etapa.</h2>
+                    </div>
+
+                    <div x-show="!formSubmitted">
+                        <form @submit.prevent="formSubmitted = true" class="space-y-8">
+                            <div class="space-y-2 group border-b border-white/20 focus-within:border-white transition-all py-4">
+                                <label class="text-[10px] tracking-widest uppercase text-white/40 block">Seu nome</label>
+                                <input type="text" required placeholder="Nome completo" class="w-full bg-transparent border-none outline-none text-lg font-light placeholder:text-white/20 text-white">
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="space-y-2 group border-b border-white/20 focus-within:border-white transition-all py-4">
+                                    <label class="text-[10px] tracking-widest uppercase text-white/40 block">E-mail</label>
+                                    <input type="email" required placeholder="seu@email.com" class="w-full bg-transparent border-none outline-none text-lg font-light placeholder:text-white/20 text-white">
+                                </div>
+                                <div class="space-y-2 group border-b border-white/20 focus-within:border-white transition-all py-4">
+                                    <label class="text-[10px] tracking-widest uppercase text-white/40 block">Telefone</label>
+                                    <input type="tel" required placeholder="(11) 99999-9999" class="w-full bg-transparent border-none outline-none text-lg font-light placeholder:text-white/20 text-white">
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-[10px] tracking-widest uppercase text-white/40">Como prefere o contato?</p>
+                                <div class="flex flex-wrap gap-8">
+                                    <template x-for="method in ['WhatsApp', 'Telefone', 'E-mail']">
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="radio" name="method" :value="method" class="sr-only" x-model="contactMethod">
+                                            <span 
+                                                class="text-xs uppercase tracking-widest transition-all" 
+                                                :class="contactMethod === method ? 'text-white border-b border-white' : 'text-white/50 border-b border-transparent group-hover:text-white'" 
+                                                x-text="method"
+                                            ></span>
+                                        </label>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full md:w-auto px-12 py-4 rounded-full border border-white/30 text-white uppercase text-[11px] font-bold tracking-[0.24em] transition-all hover:bg-white hover:text-black flex items-center justify-center gap-4 group">
+                                Enviar Interesse
+                                <i data-lucide="send" class="h-4 w-4 transition-transform group-hover:translate-x-1"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div x-show="formSubmitted" x-cloak class="space-y-6 pt-12">
+                        <h3 class="text-6xl font-light uppercase tracking-[0.2em] text-porcelain">Obrigado.</h3>
+                        <p class="text-xl text-mist font-light leading-relaxed">Sua manifestação de interesse foi registrada com precisão.<br>Em breve um de nossos consultores entrará em contato.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#0e0e0c] text-mist py-24 px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto space-y-24">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-16">
+                <div class="space-y-8">
+                    <div class="space-y-2">
+                        <p class="text-porcelain font-semibold uppercase tracking-[0.24em] text-sm">702 Estados Unidos</p>
+                        <p class="text-[10px] uppercase tracking-[0.32em] text-white/30">Address | View | Architecture</p>
+                    </div>
+                    <p class="italic text-sm leading-relaxed opacity-70">Quando nada é supérfluo, tudo é definitivo.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <p class="text-porcelain font-semibold uppercase tracking-widest text-xs">Acesso</p>
+                    <ul class="space-y-3 text-sm">
+                        <li>Rua Estados Unidos, 702</li>
+                        <li>Jardins · São Paulo / SP</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <p class="text-porcelain font-semibold uppercase tracking-widest text-xs">Interação</p>
+                    <ul class="space-y-3 text-sm">
+                        <li>+55 11 0000-0000</li>
+                        <li>contato@702estadosunidos.com.br</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <p class="text-porcelain font-semibold uppercase tracking-widest text-xs">Incorporação</p>
+                    <div class="flex gap-4">
+                        <div class="px-6 py-3 border border-white/10 text-[9px] tracking-widest text-white/40 uppercase">Sequoia</div>
+                        <div class="px-6 py-3 border border-white/10 text-[9px] tracking-widest text-white/40 uppercase">BSP</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <p class="text-[9px] tracking-wide text-white/30 max-w-3xl leading-loose">
+                    Imagens meramente ilustrativas. Sujeito a alterações sem aviso prévio. Memorial de incorporação registrado no Cartório de Registro de Imóveis. CRECI · Sequoia + BSP Empreendimentos Imobiliários.
+                </p>
+                <div class="flex gap-12 shrink-0">
+                    <a href="#" class="flex items-center gap-2 text-[10px] uppercase tracking-widest hover:text-white transition-colors">
+                        <i data-lucide="instagram" class="h-3.5 w-3.5"></i>
+                        Instagram
+                    </a>
+                    <a href="#" class="flex items-center gap-2 text-[10px] uppercase tracking-widest hover:text-white transition-colors">
+                        <i data-lucide="linkedin" class="h-3.5 w-3.5"></i>
+                        LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function app() {
+            return {
+                navVisible: false,
+                isMobileMenuOpen: false,
+                activeSection: 'hero',
+                activeLeisureIdx: 0,
+                activePlantIdx: 0,
+                selectedGalleryIdx: null,
+                formSubmitted: false,
+                contactMethod: '',
+                navLinks: [
+                    { id: 'hero', label: 'Home' },
+                    { id: 'manifesto', label: '702 Estados Unidos' },
+                    { id: 'galeria', label: 'Galeria' },
+                    { id: 'diferenciais', label: 'Lazer' },
+                    { id: 'plantas', label: 'Plantas' },
+                    { id: 'contato', label: 'Contato' },
+                ],
+                galleryData: [
+                    {
+                        title: "Rua Estados Unidos",
+                        eyebrow: "ADDRESS",
+                        copy: "Presença absoluta em um endereço que se impõe.",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180620.png"
+                    },
+                    {
+                        title: "View",
+                        eyebrow: "VIEW BY JARDIM EUROPA",
+                        copy: "Horizonte particular para o verde do Jardim Europa.",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180559.png"
+                    },
+                    {
+                        title: "Architecture",
+                        eyebrow: "ARCHITECTURE BY TRIPTYQUE",
+                        copy: "Precisão sem excessos em um projeto irreplicável.",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180535.png"
+                    }
+                ],
+                plantsData: [
+                    {
+                        category: "Apartamentos tipo",
+                        title: "Apartamentos tipo",
+                        description: "Plantas de 50 m² e 56 m² com 1 dormitório, e 70 m² com 2 dormitórios.",
+                        area: "50 m², 56 m² e 70 m²",
+                        layout: "1 e 2 dormitórios",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20145917.png"
+                    },
+                    {
+                        category: "Apartamentos Garden",
+                        title: "Apartamentos Garden",
+                        description: "Gardens com metragens de 70 m², 99 m², 117 m², 135 m² e 147 m².",
+                        area: "70 m² a 147 m²",
+                        layout: "Gardens",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20145917.png"
+                    },
+                    {
+                        category: "Penthouses",
+                        title: "Penthouses",
+                        description: "Penthouses de 143 m² e 165 m² com 2 suítes.",
+                        area: "143 m² e 165 m²",
+                        layout: "2 suítes",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20145917.png"
+                    }
+                ],
+                leisureSlides: [
+                    { 
+                        title: "Fitness", 
+                        desc: "Intensidade e foco em espaços que inspiram superação.", 
+                        tag: "01 / Workout at Home",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180612.png"
+                    },
+                    { 
+                        title: "Piscina", 
+                        desc: "Momentos de pausa em cenários criados para desacelerar o tempo.", 
+                        tag: "02 / Wellness at Home",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180543.png"
+                    },
+                    { 
+                        title: "Espaço Gourmet", 
+                        desc: "Encontros que merecem o tempo certo e o lugar exato.", 
+                        tag: "03 / Gourmet at Home",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180543.png"
+                    },
+                    { 
+                        title: "Solarium", 
+                        desc: "O entardecer ganha nova dimensão quando o Jardim Europa expande seus horizontes.", 
+                        tag: "04 / Sunshine by Jardim Europa",
+                        image: "https://raw.githubusercontent.com/gustavokzintel/702-eua/main/Captura%20de%20tela%202026-04-30%20180543.png"
+                    },
+                ],
+                features: [
+                    "Portaria blindada com clausura para pedestres e veículos",
+                    "Gerador para áreas comuns",
+                    "Aquecimento central a gás",
+                    "Carregadores elétricos nos subsolos",
+                    "Bicicletário decorado com bomba de pressão",
+                    "Reúso de água para irrigação",
+                    "Previsão de aquecimento solar na cobertura",
+                    "Infraestrutura para automação residencial"
+                ],
+                constructionStatus: [
+                    { name: "Escavação", p: 100 },
+                    { name: "Fundação", p: 100 },
+                    { name: "Estrutura", p: 97 },
+                    { name: "Alvenaria", p: 78 },
+                    { name: "Elétrica", p: 48 },
+                    { name: "Hidráulica", p: 47 },
+                    { name: "Acabamento", p: 19 },
+                    { name: "Fachada", p: 0 },
+                ],
+                initApp() {
+                    window.addEventListener('scroll', () => {
+                        this.navVisible = window.scrollY > 80;
+                        
+                        const sections = ['hero', 'manifesto', 'galeria', 'diferenciais', 'plantas', 'contato'];
+                        const scrollPos = window.scrollY + 100;
+                        
+                        for (const section of sections) {
+                            const el = document.getElementById(section);
+                            if (el && el.offsetTop <= scrollPos) {
+                                this.activeSection = section;
+                            }
+                        }
+                    });
+
+                    // GSAP Scroll Animations
+                    gsap.registerPlugin(ScrollTrigger);
+
+                    gsap.utils.toArray('.reveal').forEach(el => {
+                        gsap.from(el, {
+                            scrollTrigger: {
+                                trigger: el,
+                                start: 'top 85%',
+                                once: true
+                            },
+                            y: 30,
+                            opacity: 0,
+                            duration: 1,
+                            ease: 'power2.out'
+                        });
+                    });
+
+                    // Hero background parallax
+                    gsap.to('#hero-bg', {
+                        scrollTrigger: {
+                            trigger: '#hero',
+                            start: 'top top',
+                            end: 'bottom top',
+                            scrub: true
+                        },
+                        y: 150,
+                        scale: 1.15
+                    });
+
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

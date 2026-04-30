@@ -252,7 +252,7 @@ function Manifesto() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: i * 0.3, ease: [0.2, 0.8, 0.2, 1] }}
             viewport={{ once: true }}
-            className="text-[var(--porcelain)] text-2xl md:text-3xl lg:text-4xl tracking-[0.18em] uppercase font-light leading-snug"
+            className="text-[var(--porcelain)] text-xl md:text-2xl lg:text-3xl tracking-[0.18em] uppercase font-light leading-snug"
           >
             <span className="font-medium">{item.text}</span>{item.bold}
           </motion.p>
@@ -293,7 +293,7 @@ function Gallery() {
         <header className="grid lg:grid-cols-2 gap-12 items-end mb-20">
           <div className="space-y-6">
             <p className="text-[10px] tracking-[0.48em] uppercase text-black/50">Curadoria Visual</p>
-            <h2 className="text-5xl md:text-7xl font-light uppercase tracking-widest">Galeria</h2>
+            <h2 className="text-3xl md:text-5xl font-light uppercase tracking-widest">Galeria</h2>
             <p className="text-black/70 leading-loose max-w-md">Lugar, perspectiva e forma em uma sequência visual pensada para apresentar o 702 Estados Unidos com presença, silêncio e precisão.</p>
           </div>
           <div className="h-px bg-black/20 w-full mb-4"></div>
@@ -418,7 +418,7 @@ function Lazer() {
     <section id="diferenciais" className="bg-[var(--carbon)] overflow-hidden">
       <div className="py-32 px-6 text-center space-y-6">
         <p className="text-[10px] tracking-[0.48em] uppercase text-[var(--mist)]">Lazer e Áreas Comuns</p>
-        <h2 className="text-5xl md:text-6xl font-light uppercase tracking-widest text-[var(--porcelain)]">At Home.</h2>
+        <h2 className="text-3xl md:text-5xl font-light uppercase tracking-widest text-[var(--porcelain)]">At Home.</h2>
       </div>
 
       <div className="relative h-[70vh] min-h-[500px]">
@@ -446,7 +446,7 @@ function Lazer() {
               >
                 <p className="text-[10px] tracking-[0.42em] uppercase text-[var(--mist)]">{slides[idx].tag}</p>
                 <div className="space-y-4">
-                  <h3 className="text-4xl md:text-5xl font-light uppercase tracking-widest text-[var(--porcelain)]">{slides[idx].title}</h3>
+                  <h3 className="text-3xl md:text-4xl font-light uppercase tracking-widest text-[var(--porcelain)]">{slides[idx].title}</h3>
                   <div className="w-14 h-px bg-white/30 ml-auto pt-8"></div>
                 </div>
                 <p className="text-[var(--mist)] leading-relaxed text-sm font-light">{slides[idx].desc}</p>
@@ -758,11 +758,11 @@ export default function App() {
       <main>
         <Hero />
         
-        <section className="bg-[var(--carbon)] py-40 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-24 space-y-6">
+        <section className="bg-[var(--carbon)] py-32 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col items-center">
+            <div className="text-center mb-16 space-y-6 w-full">
                <p className="text-[10px] tracking-[0.48em] uppercase text-white/30">Filme da Campanha</p>
-               <h2 className="text-4xl md:text-5xl font-light uppercase tracking-widest text-white">702 Estados Unidos</h2>
+               <h2 className="text-2xl md:text-3xl font-light uppercase tracking-widest text-white">702 Estados Unidos</h2>
             </div>
             
             <div className="relative aspect-video max-w-5xl mx-auto overflow-hidden shadow-2xl">
@@ -787,7 +787,7 @@ export default function App() {
            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-32">
               <div className="lg:sticky lg:top-32 h-fit space-y-8">
                  <p className="text-[10px] tracking-[0.48em] uppercase text-black/40">Diferenciais</p>
-                 <h2 className="text-5xl md:text-7xl font-light uppercase tracking-widest leading-none">Presença <br/>Absoluta.</h2>
+                 <h2 className="text-3xl md:text-5xl font-light uppercase tracking-widest leading-none">Presença <br/>Absoluta.</h2>
                  <p className="text-black/60 italic text-xl font-light">Presença absoluta é um endereço que se impõe.</p>
               </div>
 
@@ -867,7 +867,7 @@ export default function App() {
            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
               <div className="space-y-8">
                  <p className="text-xs text-white/40 uppercase tracking-[0.32em]">View | Architecture | <span className="text-white font-semibold">Address by Rua Estados Unidos</span></p>
-                 <h2 className="text-4xl md:text-5xl font-light uppercase tracking-widest leading-normal">Rua Estados Unidos, 702<br/>Jardins, São Paulo / SP</h2>
+                 <h2 className="text-3xl md:text-4xl font-light uppercase tracking-widest leading-normal">Rua Estados Unidos, 702<br/>Jardins, São Paulo / SP</h2>
                  <div className="space-y-6 text-white/60 leading-loose text-lg font-light max-w-lg">
                    <p>O único residencial da Rua Estados Unidos, localizado no melhor bairro de São Paulo, próximo aos melhores restaurantes, bares e lojas da cidade.</p>
                    <p>A 5 minutos do Parque do Ibirapuera, possui uma vista deslumbrante para o Jardim Europa.</p>
