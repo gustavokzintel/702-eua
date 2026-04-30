@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+@theme {
+  --color-carbon: #1d1d1b;
+  --color-carbon-deep: #131311;
+  --color-mist: #c6c6c4;
+  --color-porcelain: #e3e1df;
+  
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  /* Design System Variables */
+  --carbon: #1d1d1b;
+  --carbon-deep: #131311;
+  --mist: #c6c6c4;
+  --porcelain: #e3e1df;
+  --carbon-translucent: rgba(29, 29, 27, 0.88);
+
+  /* Geometry */
+  --diagonal-angle: 63.58deg;
+  --diagonal-skew: -26.42deg;
+  --diagonal-offset: 49.69%;
+
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 32px;
+  --space-lg: 64px;
+  --space-xl: 120px;
+  --space-xxl: 200px;
+
+  /* Easing */
+  --ease-editorial: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-silent: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background: var(--carbon);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    color: var(--mist);
+    background: var(--carbon);
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+}
+
+@layer components {
+  .diagonal-clip-right {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 49.69%) 100%, 0 100%);
+  }
+
+  .diagonal-clip-left {
+    clip-path: polygon(49.69% 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .contact-diagonal-clip {
+    clip-path: polygon(75% 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Global Transition Classes */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 800ms var(--ease-editorial), transform 800ms var(--ease-editorial);
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.global-reference-image {
+  background-image: 
+    linear-gradient(180deg, rgba(29, 29, 27, 0.08), rgba(29, 29, 27, 0.24)),
+    url("https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=2000");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
